@@ -21,4 +21,4 @@ app.use('/', router); //Every time the app receives any http request to the base
 
 
 
-app.listen(3000);
+module.exports = app;

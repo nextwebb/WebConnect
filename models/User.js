@@ -1,5 +1,9 @@
+//reurns the db obj
+const usersCollection = require('../db').collection('users');
+
 const validator = require("validator");
 
+// function constructor
 let User = function(data) {
    this.data = data;
    this.errors = [];
@@ -52,11 +56,30 @@ User.prototype.cleanUp = function() {
         
     }
 
-    User.prototype.register = function() {
+    User.prototype.login = function(callback) {
+        //the "this" keyword here refers to the global object and the instance object
+        this.cleanUp()
+
+        usersCollection.findOne({username: this.data.username}, (err, attemptedUser) => {
+            if (attemptedUser && attemptedUser.password == this.data.password) {
+               callback("Congrats!")
+            } else {
+                callback("Invalid username / Password!")
+               
+            }
+        })
+
+    }
+
+     User.prototype.register = function() {
         //step #1: Validate user data
         this.cleanUp();
         this.validate();
+
         // step #2: Only if there are no validation errors
         // then save the user data into a database
+        if (!this.errors.length) {
+            usersCollection.insertOne(this.data)
+        }
     }
 module.exports = User;

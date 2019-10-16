@@ -1,10 +1,10 @@
 {
-  "name": "complex-app",
+  "name": "webconnect",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "watch": "nodemon app",
+    "watch": "nodemon db",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
