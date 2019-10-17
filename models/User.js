@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 //reurns the db obj
 const usersCollection = require('../db').collection('users');
 
@@ -44,8 +45,8 @@ User.prototype.cleanUp = function() {
         if(this.data.password.length > 0 &&this.data.password.length < 12){
             this.errors.push("Password must be at least 12 characters.")
         }
-        if(this.data.password.lengthh > 100){
-            this.errors.push("Password cannot exceed 100 characters")
+        if(this.data.password.lengthh > 50){
+            this.errors.push("Password cannot exceed 50 characters")
         }
         if(this.data.username.length > 0 &&this.data.username.length < 3){
             this.errors.push("Username must be at least 3 characters.")
@@ -56,19 +57,25 @@ User.prototype.cleanUp = function() {
         
     }
 
-    User.prototype.login = function(callback) {
-        //the "this" keyword here refers to the global object and the instance object
+    User.prototype.login = function() {
+        //we use a promise for asynchronous operations
+        //tasks that we dont how long it'll take to execute
+            return new Promise( (resolve, reject) => {
+                //the "this" keyword here refers to the global object and the instance object
         this.cleanUp()
 
-        usersCollection.findOne({username: this.data.username}, (err, attemptedUser) => {
-            if (attemptedUser && attemptedUser.password == this.data.password) {
-               callback("Congrats!")
-            } else {
-                callback("Invalid username / Password!")
-               
-            }
+        usersCollection.findOne({username: this.data.username}).then((attemptedUser)=>{
+            if (attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)) {
+                resolve("Congrats!")
+             } else {
+                 reject("Invalid username / Password!")
+                
+             }
+        }).catch(function(){
+            reject("PLease try again later.")
         })
 
+        }) 
     }
 
      User.prototype.register = function() {
@@ -79,6 +86,9 @@ User.prototype.cleanUp = function() {
         // step #2: Only if there are no validation errors
         // then save the user data into a database
         if (!this.errors.length) {
+            //hash user password
+            let salt = bcrypt.genSaltSync(10) //10 degree rounds of randomness
+            this.data.password = bcrypt.hashSync(this.data.password, salt)
             usersCollection.insertOne(this.data)
         }
     }

@@ -1,5 +1,18 @@
+
 const express = require('express');
+const session = require('express-session');
 const app = express();
+
+let sessionOptions = session({
+    secret: "Javascript is soooo coool",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge:1000 * 60 * 60 * 24, httpOnly: true
+    }
+})
+
+app.use(sessionOptions);
 
 const router = require('./router');//it expects a file
 
