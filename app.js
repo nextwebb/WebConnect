@@ -1,10 +1,14 @@
 
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session)
+const flash = require('connect-flash');
 const app = express();
+
 
 let sessionOptions = session({
     secret: "Javascript is soooo coool",
+    store: new MongoStore({client: require('./db')}),
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -13,6 +17,7 @@ let sessionOptions = session({
 })
 
 app.use(sessionOptions);
+app.use(flash())
 
 const router = require('./router');//it expects a file
 
