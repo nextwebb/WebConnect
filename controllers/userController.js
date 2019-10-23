@@ -1,6 +1,17 @@
 
 const User = require('../models/User');
 
+exports.mustBeloggedIn = function(req, res, next) {
+    if (req.session.user) {
+        next()// we're telling express to call the next function 
+    } else {
+        req.flash("errors", "You must be logged in to perform that action")
+        req.session.save( function() {
+            res.redirect("/")
+        })
+    }
+}
+
 exports.login = function(req, res) {
     let user = new User(req.body);//new instance
     user.login().then(function(result) {
@@ -8,7 +19,8 @@ exports.login = function(req, res) {
         req.session.user = {
             //in memory there will be a property named avater our object
             avatar:user.avatar,
-             username: user.data.username
+             username: user.data.username,
+             _id: user.data._id
         }
        // console.log(user.avatar)
         req.session.save( function() {
@@ -38,7 +50,8 @@ exports.register =  function(req, res) {
          //Update the session  property with new user
         req.session.user = {
             avatar:user.avatar,
-            username: user.data.username
+            username: user.data.username,
+            _id: user.data._id
         }
         req.session.save(function(){// make sure the session data is saved to the server database b4 redirecting
             res.redirect('/');
@@ -59,7 +72,7 @@ exports.register =  function(req, res) {
 exports.home = function(req, res) {
     //if the session has the user property
    if( req.session.user){
-        res.render('dashboard', {username: req.session.user.username, avatar: req.session.user.avatar });
+        res.render('dashboard');
    } else{
          //calls the appropriate view
     res.render('guest', {errors: req.flash('errors'), regErrors: req.flash('regErrors')} )

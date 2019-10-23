@@ -19,6 +19,12 @@ let sessionOptions = session({
 app.use(sessionOptions);
 app.use(flash())
 
+app.use(function(req, res, next) {
+    //this session data is now made available across all ejs templates
+    res.locals.user = req.session.user
+    next() 
+})
+
 const router = require('./router');//it expects a file
 
 //boiler plate code
@@ -32,8 +38,10 @@ app.use(express.static('public'));
 //     next();
 // }
 // app.use('/about',log); 
+
 app.set('views', './views');
-app.set('view engine', 'ejs'); //we want to use the ejs template engine
+app.set('view engine', 'ejs');
+ //we want to use the ejs template engine
 
 app.use('/', router); //Every time the app receives any http request to the base directory the variable router gets executed and added to the server.
 
