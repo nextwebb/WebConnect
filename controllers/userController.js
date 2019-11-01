@@ -52,9 +52,9 @@ exports.register = function(req, res) {
 
 exports.home = function(req, res) {
   if (req.session.user) {
-    res.render('home-dashboard')
+    res.render('dashboard')
   } else {
-    res.render('home-guest', {errors: req.flash('errors'), regErrors: req.flash('regErrors')})
+    res.render('guest', { regErrors: req.flash('regErrors')})
   }
 }
 
@@ -67,7 +67,7 @@ exports.ifUserExists = function(req, res, next) {
   })
 }
 
-exports.profilePostsScreen = function(req, res) {
+exports.profilePostScreen = function(req, res) {
   // ask our post model for posts by a certain author id
   Post.findByAuthorId(req.profileUser._id).then(function(posts) {
     res.render('profile', {

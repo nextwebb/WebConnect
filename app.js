@@ -20,11 +20,21 @@ app.use(sessionOptions);
 app.use(flash())
 
 app.use(function(req, res, next) {
-    //this session data is now made available across all ejs templates
-    res.locals.user = req.session.user
-    next() 
-})
 
+    // make all error and success flash messages available from all templates
+
+    res.locals.errors = req.flash("errors")
+    res.locals.success = req.flash("success")
+
+
+    // make current user id available on the req object
+    if (req.session.user) {req.visitorId = req.session.user._id} else {req.visitorId = 0}
+    
+    // make user session data available from within view templates
+    res.locals.user = req.session.user
+    next()
+  })
+  
 const router = require('./router');//it expects a file
 
 //boiler plate code
