@@ -36,7 +36,7 @@ app.use(function(req, res, next) {
     // make current user id available on the req object
     if (req.session.user) {req.visitorId = req.session.user._id} else {req.visitorId = 0}
     
-    // make user session data available from within view templates
+    // make logged in user session data available from within view templates
     res.locals.user = req.session.user
     next()
   })

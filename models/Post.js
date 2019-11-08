@@ -92,6 +92,7 @@ Post.reusablePostQuery = function(uniqueOperations, visitorId) {
     let posts = await postsCollection.aggregate(aggOperations).toArray()
 
     // clean up author property in each post object
+    console.log(posts)
     posts = posts.map(function(post) {
       post.isVisitorOwner = post.authorId.equals(visitorId)
       post.authorId = undefined
@@ -160,7 +161,7 @@ Post.search = function(searchTerm) {
       ])
       resolve(posts)
     } else { 
-      reject()
+      reject([])
     }
   })
 }
