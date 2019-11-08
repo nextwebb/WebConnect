@@ -5,7 +5,8 @@ const ObjectID = require('mongodb').ObjectID
 
 
 let Follow = function(followedUsername, authorId) {
-this.followedUsername =followedUsername
+
+this.followedUsername = followedUsername
 this.authorId = authorId
 this.errors = []
 
@@ -18,19 +19,41 @@ this.followedUsername = ""
     }
 }
 
-Follow.prototype.validate = async function() {
+Follow.prototype.validate = async function(action) {
 // followedUsername must exist in database
+//gets the follow user acccount and Id
 let followedAccount = await userCollection.findOne({username: this.followedUsername})
+//saves it as a property
 if (followedAccount) {
     this.followedId = followedAccount._id
 
 } else {
     this.errors.push("You cannot follow a user that does not exist.")
 }
-    let doesFollowAlreadyExist = followsCollection.findOne({followedId: this.followedId, authorId: new ObjectID(this.authorId) })
+   let doesFollowAlreadyExist = await  followsCollection.findOne({followedId: this.followedId, authorId: new ObjectID(this.authorId)}) //Check if a follow exists or not
+   if ( action == "create") {
+       if (doesFollowAlreadyExist) {
+           this.errors.push("You are already following this user.")
+       }
+   }
+
+   if ( action == "delete") {
+    if (!doesFollowAlreadyExist) {
+        this.errors.push("You cannot stop following someone you don't already follow.")
+    }
+}
+
+// should not be able to follow yourself
+if (this.followedId.equals(this.authorId)) {
+    this.errors.push("You cannot follow yourself.")
+}
+
 }
 
 Follow.prototype.create = function(){
+
+  //  console.log(follow)
+    console.log(this.authorId)
     return new Promise(async (resolve, reject) =>{
         this.cleanUp()
         await this.validate("create")
