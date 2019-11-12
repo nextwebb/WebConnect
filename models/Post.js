@@ -95,7 +95,7 @@ Post.reusablePostQuery = function(uniqueOperations, visitorId) {
     // clean up author property in each post object
    // console.log(posts)
     posts = posts.map(function(post) {
-      post.isVisitorOwner = post.authorId.equals(visitorId)
+      post.isVisitorOwner = post.authorId.equals(visitorId) 
       post.authorId = undefined
 
       post.author = {
@@ -186,7 +186,7 @@ Post.getFeed = async function(id) {
   // look for post where the author is in the above array of followed users
    return Post.reusablePostQuery([
      {$match: {author: {$in: followedUsers }}},
-     {$sort: {createdDate: -1}}
+     {$sort: {createdDate: -1}} // sort by most recent
    ])
 }
  

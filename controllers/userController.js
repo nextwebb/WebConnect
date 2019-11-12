@@ -79,6 +79,7 @@ exports.home = async function(req, res) {
   if (req.session.user) {
     // fetch feed of post for current user
     let posts = await Post.getFeed(req.session.user._id)
+    console.log(posts)
     res.render('dashboard', { posts: posts})
   } else {
     res.render('guest', { regErrors: req.flash('regErrors')})
@@ -100,6 +101,7 @@ exports.profilePostScreen = function(req, res) {
   // ask our post model for posts by a certain author id
   Post.findByAuthorId(req.profileUser._id).then(function(posts) {
     res.render('profile', {
+      title:`Profile for ${req.profileUser.username}`,
       currentPage: "posts",
       posts: posts,
       profileUsername: req.profileUser.username,
@@ -109,7 +111,9 @@ exports.profilePostScreen = function(req, res) {
       counts: {postCount: req.postCount, followerCount: req.followerCount, followingCount: req.followingCount}
     })
   }).catch(function() {
-    res.render("404")
+    res.render("404", {
+      title:"Profile not found "
+    })
   })
 
 }

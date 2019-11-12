@@ -1,7 +1,9 @@
 const Post = require('../models/Post')
 
 exports.viewCreateScreen = function(req, res) {
-  res.render('create-post')
+  res.render('create-post',  {
+    title:`Create post by ${req.session.user.username}`
+  })
 }
 
 exports.create = function(req, res) {
@@ -18,7 +20,7 @@ exports.create = function(req, res) {
 exports.viewSingle = async function(req, res) {
   try {
     let post = await Post.findSingleById(req.params.id, req.visitorId)
-    res.render('single-post-screen', {post: post})
+    res.render('single-post-screen', {post: post, title:post.title})
   } catch(error) {
     res.render('404')
   }
@@ -28,7 +30,9 @@ exports.viewEditScreen = async function(req, res) {
   try {
     let post = await Post.findSingleById(req.params.id, req.visitorId)
     if (post.isVisitorOwner) {
-      res.render("edit-post", {post: post})
+      res.render("edit-post", {post: post, 
+        title: `Edit post by ${req.session.user.username}`
+      })
     } else {
       req.flash("errors", "You do not have permission to perform that action.")
       req.session.save(() => res.redirect("/"))
