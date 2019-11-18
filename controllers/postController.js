@@ -17,6 +17,15 @@ exports.create = function(req, res) {
   })
 }
 
+exports.apiCreate = function(req, res) {
+  let post = new Post(req.body, req.apiUser._id)
+  post.create().then(function(newId) {
+   res.json("Congrats.")
+  }).catch(function(errors) {
+   res.json(errors)
+  })
+}
+
 exports.viewSingle = async function(req, res) {
   try {
     let post = await Post.findSingleById(req.params.id, req.visitorId)
