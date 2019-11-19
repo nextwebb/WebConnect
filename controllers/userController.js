@@ -121,7 +121,7 @@ exports.home = async function(req, res) {
   if (req.session.user) {
     // fetch feed of post for current user
     let posts = await Post.getFeed(req.session.user._id)
-    console.log(posts)
+   // console.log(posts)
     res.render('dashboard', { posts: posts})
   } else {
     res.render('guest', { regErrors: req.flash('regErrors')})

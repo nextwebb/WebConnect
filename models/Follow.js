@@ -55,7 +55,7 @@ if (this.followedId.equals(this.authorId)) {
 Follow.prototype.create = function(){
 
   //  console.log(follow)
-    console.log(this.authorId)
+  //  console.log(this.authorId)
     return new Promise(async (resolve, reject) =>{
         this.cleanUp()
         await this.validate("create")
@@ -110,7 +110,7 @@ Follow.getFollowsById = function(id) {
              let user = new User(follower, true)
              return {username: follower.username, avatar: user.avatar}
         })
-        console.log(followers)
+        //console.log(followers)
         resolve(followers)
 
        } catch(error) {
