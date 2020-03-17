@@ -7,6 +7,7 @@ let User = function(data, getAvatar) {
   this.data = data
   this.errors = []
   if (getAvatar == undefined) {getAvatar = false}
+  
   if (getAvatar) {this.getAvatar()}
 }
 
