@@ -4,10 +4,11 @@ const validator = require("validator")
 const md5 = require('md5')
 
 let User = function(data, getAvatar) {
+  // globally scoped variables
   this.data = data
   this.errors = []
   if (getAvatar == undefined) {getAvatar = false}
-  
+    // globally scoped and computed
   if (getAvatar) {this.getAvatar()}
 }
 
