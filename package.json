@@ -27,7 +27,7 @@
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "jsonwebtoken": "^8.5.1",
-    "marked": "^0.7.0",
+    "marked": "^1.1.1",
     "md5": "^2.2.1",
     "mongodb": "^3.3.0",
     "nodemon": "^1.19.1",
