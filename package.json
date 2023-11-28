@@ -13,7 +13,7 @@
   "dependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "@sendgrid/mail": "^6.4.0",
+    "@sendgrid/mail": "^7.0.0",
     "axios": "^0.21.1",
     "babel-loader": "^8.0.6",
     "bcryptjs": "^2.4.3",
